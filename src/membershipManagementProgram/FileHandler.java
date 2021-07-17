@@ -40,9 +40,42 @@ public class FileHandler {
             }
 
         } catch(IOException e) {
-
+            System.out.println("error: " + e.getMessage());
         }
 
         return m;
+    }
+
+    public void appendFile(String mem) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("members.csv", true ))) {
+            writer.write(mem + "\n");
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    public void overwriteFile(LinkedList<Member> m) {
+        String s;
+
+        // write to temp file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("members.temp", false))) {
+            for(int i = 0; i < m.size(); i++) {
+                s = m.get(i).toString();
+                writer.write(s + "\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        // Rename temp file to original file.
+        try {
+            File f = new File("members.csv");
+            File tf = new File("members.temp");
+
+            f.delete();
+            tf.renameTo(f);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 }
