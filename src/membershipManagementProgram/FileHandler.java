@@ -72,8 +72,8 @@ public class FileHandler {
             File f = new File("members.csv");
             File tf = new File("members.temp");
 
-            f.delete();
             tf.renameTo(f);
+            f.delete();
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
