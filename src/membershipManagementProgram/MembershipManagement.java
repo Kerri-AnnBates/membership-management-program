@@ -48,4 +48,75 @@ public class MembershipManagement {
 
         return choice;
     }
+
+    public String addMembers(LinkedList<Member> m) {
+        String name;
+        int club;
+        String mem;
+        double fees;
+        int memberID;
+        Member mbr;
+        Calculator<Integer> calc;
+
+        System.out.println("Enter the member's name:");
+        name = reader.nextLine();
+
+        printClubOptions();
+        System.out.println("Enter club ID that member has access to:");
+        club = getIntInput();
+
+        while (club < 1 || club > 4) {
+            System.out.println("INVALID ENTRY: " + club);
+            System.out.println("Enter club ID that member has access to (1-4):");
+            club = getIntInput();
+        }
+
+        // Assign member id to member
+        if(m.size() > 0) {
+            memberID = m.getLast().getMemberID();
+        } else {
+            memberID = 1;
+        }
+
+        // Calculate fees for member type.
+        if(club != 4) {
+            // Add a single member
+            calc = (n) -> {
+                switch (n) {
+                    case 1:
+                        return 900;
+                    case 2:
+                        return 950;
+                    case 3:
+                        return 1000;
+                    default:
+                        return -1;
+                }
+            };
+
+            fees = calc.calculateFees(club);
+            mbr = new SingleClubMember('S', memberID, name, fees, club);
+            m.add(mbr);
+            mem = mbr.toString();
+            System.out.println("/nSTATUS: Single Club Member added\n");
+        } else {
+            // Add a multi member
+            calc = (n) -> {
+                switch (n) {
+                    case 4:
+                        return 1200;
+                    default:
+                        return -1;
+                }
+            };
+
+            fees = calc.calculateFees(club);
+            mbr = new MultiClubMember('M', memberID, name, fees, 100);
+            m.add(mbr);
+            mem = mbr.toString();
+            System.out.println("/nSTATUS: Multi Club Member added\n");
+        }
+
+        return mem;
+    }
 }
